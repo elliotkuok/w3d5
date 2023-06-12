@@ -52,14 +52,29 @@ class KnightPathFinder
     new_moves.each {|move| @considered_positions << move}
   end
 
-
+  def find_path(end_pos)
+    target_node = @root_node.bfs(end_pos)
+    trace_path_back(target_node)
+  end
+  
+  def trace_path_back(current_node)
+    path_back = [current_node.value]
+    current_parent = current_node.parent
+    until current_parent == @root_node
+      path_back.unshift(current_parent.value) # adds position to front of path_back
+      #move up a node
+      current_node = current_parent
+      current_parent = current_parent.parent
+    end
+    path_back.unshift(current_parent.value)
+    path_back
+  end
 
 end
 
-kp = KnightPathFinder.new([0,0])
-# p kp.new_move_positions([4,4])
-# root = kp.root_node
-# root.children[1].children[0].children[0].value
+kpf = KnightPathFinder.new([0, 0])
+p kpf.find_path([7, 6]) # => [[0, 0], [1, 2], [2, 4], [3, 6], [5, 5], [7, 6]]
+p kpf.find_path([6, 2]) # => [[0, 0], [1, 2], [2, 0], [4, 1], [6, 2]]
 
 
 
